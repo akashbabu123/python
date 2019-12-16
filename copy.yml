@@ -1,0 +1,8 @@
+---
+- hosts: crunchify-group
+  tasks:
+    - name: copy file to remote host
+      copy:
+        src: /root/Akash/python/aka.py
+        dest: /var/www/cgi-bin/
+
