@@ -1,0 +1,32 @@
+---
+ - name: This sets up an httpd webserver
+   hosts: web
+   tasks:
+   - name: update
+     yum:
+       name: mod_wsgi
+       state: present
+   - name: httpd
+     yum:
+       name: httpd
+       state: present
+   - name: ensure httpd is enable
+     service:
+       name: httpd
+       enabled: yes
+     notify:
+     - startservice
+    handlers:
+    - name: startservice
+      service:
+      name: httpd
+      state: restarted
+   - name: Fix 'support_tools' permissions
+     file: path=/var/www/cgi-bin mode=0775 state=directory recurse=yes
+   - name: ensure httpd is restart
+     service:
+       name: httpd 
+       state: restarted
+   - name: Fix 'support_tools' permissions
+     file: path=/var/www/cgi-bin/helloworld.py mode=0775 state=directory recurse=yes
+

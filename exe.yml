@@ -1,0 +1,24 @@
+---
+ - hosts: web
+   tasks:
+   - name: Install HTTPD on CentOS nodes
+     yum:
+        name: httpd
+        state: latest
+   - name: update
+     yum:
+        name: mod_wsgi
+        state: present
+   - name: Fix 'support_tools' permissions
+     file: path=/var/www/cgi-bin mode=0775 state=directory recurse=yes
+
+     notify:
+     - startservice
+   handlers:
+   - name: startservice
+     service:
+       name: httpd
+       state: restarted
+   - name: Fix 'support_tools' permissions
+     file: path=/var/www/cgi-bin/helloworld.py mode=0775 state=directory recurse=yes
+     
